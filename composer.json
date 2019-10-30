@@ -1,6 +1,6 @@
 {
-    "name": "xuezhitech/tp5-wx-web",
-    "description": "微信网页授权相关",
+    "name": "xuezhitech/tp5-wxpay",
+    "description": "微信支付",
     "authors": [
         {
             "name": "jinxuezhi",
