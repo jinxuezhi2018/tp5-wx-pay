@@ -1,0 +1,19 @@
+{
+    "name": "xuezhitech/tp5-wx-web",
+    "description": "微信网页授权相关",
+    "authors": [
+        {
+            "name": "jinxuezhi",
+            "email": "jinxuezhi@xuezhi.info"
+        }
+    ],
+    "license": "Apache-2.0",
+    "require": {
+    	"topthink/framework": "5.1.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "xuezhitech\\wx\\": "src/"
+        }
+    }
+}
