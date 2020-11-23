@@ -1,8 +1,6 @@
 <?php
 
 namespace xuezhitech\wx;
-namespace xuezhitech\wx\Util;
-
 
 class WechatPay
 {
@@ -19,9 +17,9 @@ class WechatPay
     }
 
     //图片上传
-    public function upload() {
-        $upload = new \xuezhitech\wx\Util\Upload($this->config);
-        return $upload->imgUpload();
+    public function upload( $file ) {
+        $upload = new \xuezhitech\wx\V3\Upload($this->config);
+        return $upload->imgUpload( $file );
     }
 
 
