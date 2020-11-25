@@ -21,7 +21,6 @@ class Upload
     }
 
     public function imgUpload( $filePath ) {
-        $url = $this->url;
         $mime_type = $this->getMimeType($filePath);
         $filename = basename($filePath);
         //body 分割符
@@ -52,17 +51,7 @@ class Upload
         $body .= file_get_contents($filePath)."\r\n";
         $body .= "--{$boundary}--\r\n";
 
-        $response = json_decode($this->curl->getInfo($url,'POST',$body,$header),true);
-
-        if ( isset($response['media_id']) ) {
-            return $response['media_id'];
-        }else{
-            if ( isset($response['message']) ) {
-                return $response['message'];
-            }else{
-                return false;
-            }
-        }
+        return $this->curl->getInfo($this->url,'POST',$body,$header);
     }
 
     private function getMimeType( $file ){
