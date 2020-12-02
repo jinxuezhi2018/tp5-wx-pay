@@ -41,5 +41,9 @@ class WechatPay
         return $merchant->applymentStatus( $applyment_id );
     }
 
-
+    //合单下单-JSAPI支付/小程序支付API
+    public function combineTransactions( $body ) {
+        $merchant = new \xuezhitech\wx\V3\Transactions( $this->config );
+        return $merchant->combineTransactions( $body );
+    }
 }
