@@ -16,6 +16,16 @@ class Sign
         $this->config = array_merge($this->config,$config);
     }
 
+    public function getMiniPaySign($appid,$time,$nonceStr,$prepay_id) {
+        $private_key = \openssl_get_privatekey(\file_get_contents($this->config['private_key']));
+        $message =  $appid."\n".
+            $time."\n".
+            $nonceStr."\n".
+            $prepay_id."\n";
+        openssl_sign($message, $raw_sign, $private_key, 'sha256WithRSAEncryption');
+        return \base64_encode($raw_sign);
+    }
+
     public function getSign($url,$http_method,$body) {
         $merchant_id = $this->config['merchant_id'];
         $serial_no = $this->config['serial_no'];

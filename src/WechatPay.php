@@ -46,4 +46,10 @@ class WechatPay
         $merchant = new \xuezhitech\wx\V3\Transactions( $this->config );
         return $merchant->combineTransactions( $body );
     }
+
+    //合单下单-JSAPI支付/小程序支付API
+    public function getMiniPaySign( $appid,$time,$nonceStr,$prepay_id ) {
+        $sign = new \xuezhitech\wx\Util\Sign( $this->config );
+        return $sign->getMiniPaySign( $appid,$time,$nonceStr,$prepay_id );
+    }
 }
