@@ -10,6 +10,7 @@ class WechatPay
         'private_key' => '',
         'wxpay_key' => '',
         'user_agent' => '',
+        'apiv3_key' => '',
         'schema'=>'WECHATPAY2-SHA256-RSA2048'
     ];
 
@@ -51,5 +52,11 @@ class WechatPay
     public function getMiniPaySign( $appid,$time,$nonceStr,$prepay_id ) {
         $sign = new \xuezhitech\wx\Util\Sign( $this->config );
         return $sign->getMiniPaySign( $appid,$time,$nonceStr,$prepay_id );
+    }
+
+    //签名验证
+    public function signVerification( $body,$header ) {
+        $certificates = new \xuezhitech\wx\V3\Certificates( $this->config );
+        return $certificates->signVerification( $body,$header );
     }
 }
