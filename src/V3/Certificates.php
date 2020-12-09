@@ -101,8 +101,6 @@ class Certificates
     }
 
     private function verify($message, $signature, $key) {
-        $msg = json_encode(['code'=>'CERT_ERROR','message'=>'没有找到相对应的证书序列号!']);
-        throw new \Exception($msg);
         $signature = base64_decode($signature);
         return openssl_verify($message, $signature, \openssl_get_publickey($key), 'sha256WithRSAEncryption');
     }
