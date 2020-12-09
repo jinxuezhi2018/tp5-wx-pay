@@ -112,7 +112,7 @@ class Certificates
         if ( strlen($ciphertext) <= self::AUTH_TAG_LENGTH_BYTE ) {
             throw new \Exception('ciphertext值错误');
         }
-        if ( strlen() != self::KEY_LENGTH_BYTE ) {
+        if ( !isset($this->config['apiv3_key']) || (strlen($this->config['apiv3_key']) != self::KEY_LENGTH_BYTE) ) {
             $msg = json_encode(['code'=>'KEY_ERROR','message'=>'平台证书错误!']);
             throw new \Exception($msg);
         }
