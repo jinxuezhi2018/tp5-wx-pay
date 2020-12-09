@@ -18,6 +18,8 @@ class Certificates
 
     const AUTH_TAG_LENGTH_BYTE = 16;
 
+    const KEY_LENGTH_BYTE = 32;
+
     public function __construct($config=[]){
         $this->config = array_merge($this->config,$config);
         $this->sign = new \xuezhitech\wx\Util\Sign($this->config);
@@ -99,6 +101,8 @@ class Certificates
     }
 
     private function verify($message, $signature, $key) {
+        $msg = json_encode(['code'=>'CERT_ERROR','message'=>'没有找到相对应的证书序列号!']);
+        throw new \Exception($msg);
         $signature = base64_decode($signature);
         return openssl_verify($message, $signature, \openssl_get_publickey($key), 'sha256WithRSAEncryption');
     }
@@ -107,6 +111,10 @@ class Certificates
         $ciphertext = \base64_decode($ciphertext);
         if ( strlen($ciphertext) <= self::AUTH_TAG_LENGTH_BYTE ) {
             throw new \Exception('ciphertext值错误');
+        }
+        if ( strlen() != self::KEY_LENGTH_BYTE ) {
+            $msg = json_encode(['code'=>'KEY_ERROR','message'=>'平台证书错误!']);
+            throw new \Exception($msg);
         }
         $ctext = substr($ciphertext, 0, -self::AUTH_TAG_LENGTH_BYTE);
         $authTag = substr($ciphertext, -self::AUTH_TAG_LENGTH_BYTE);
