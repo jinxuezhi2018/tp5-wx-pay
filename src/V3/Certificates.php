@@ -101,6 +101,10 @@ class Certificates
     }
 
     private function verify($message, $signature, $key) {
+        if ( !in_array('sha256WithRSAEncryption', \openssl_get_md_methods(true)) ) {
+            $msg = json_encode(['code'=>'KEY_ERROR','message'=>'当前PHP环境不支持SHA256withRSA!']);
+            throw new \Exception($msg);
+        }
         $signature = base64_decode($signature);
         return openssl_verify($message, $signature, \openssl_get_publickey($key), 'sha256WithRSAEncryption');
     }
@@ -114,15 +118,15 @@ class Certificates
             $msg = json_encode(['code'=>'KEY_ERROR','message'=>'平台证书错误!']);
             throw new \Exception($msg);
         }
-        $ctext = substr($ciphertext, 0, -self::AUTH_TAG_LENGTH_BYTE);
-        $authTag = substr($ciphertext, -self::AUTH_TAG_LENGTH_BYTE);
 
-        return \openssl_decrypt($ctext,
-            'aes-256-gcm',
-            $this->config['apiv3_key'],
-            \OPENSSL_RAW_DATA,
-            $nonce,
-            $authTag,
-            $associated_data);
+        if (PHP_VERSION_ID >= 70100 && in_array('aes-256-gcm', \openssl_get_cipher_methods())) {
+            $ctext = substr($ciphertext, 0, -self::AUTH_TAG_LENGTH_BYTE);
+            $authTag = substr($ciphertext, -self::AUTH_TAG_LENGTH_BYTE);
+        }else{
+            $msg = json_encode(['code'=>'PHP_VERSION_ID_ERROR','message'=>'需要PHP7.1以上版本!']);
+            throw new \Exception($msg);
+        }
+
+        return \openssl_decrypt($ctext,'aes-256-gcm',$this->config['apiv3_key'],\OPENSSL_RAW_DATA,$nonce,$authTag,$associated_data);
     }
 }
