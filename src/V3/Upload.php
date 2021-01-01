@@ -1,7 +1,7 @@
 <?php
 
 
-namespace xuezhitech\wx\V3;
+namespace xuezhitech\wxpay\V3;
 
 
 class Upload

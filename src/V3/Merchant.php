@@ -1,7 +1,7 @@
 <?php
 
 
-namespace xuezhitech\wx\V3;
+namespace xuezhitech\wxpay\V3;
 
 
 class Merchant
@@ -40,7 +40,7 @@ class Merchant
     //二级商户进件API
     public function applyments( $data ) {
         //微信平台私钥
-        $serial_no = $this->getWechatCertificates();
+        $serial_no = $this->certificates->getWechatCertificates();
         $body = json_encode($data,JSON_UNESCAPED_UNICODE);
         //获得签名
         $token = $this->sign->getSign($this->applyments_url,'POST',$body);
@@ -53,19 +53,5 @@ class Merchant
             'Authorization: ' . $this->config['schema'] . ' ' . $token
         ];
         return $this->curl->getInfo($this->applyments_url,'POST',$body,$header);
-    }
-    //获得微信平台证书
-    private function getWechatCertificates() {
-        $serial_no = null;
-        //获取平台证书
-        $certificates = json_decode($this->certificates->getCertificates(),true);
-        $time = time();
-        foreach ( $certificates['data'] as $values ) {
-            if ( strtotime($values['expire_time'])>$time ) {
-                $serial_no = $values['serial_no'];
-                break;
-            }
-        }
-        return $serial_no;
     }
 }

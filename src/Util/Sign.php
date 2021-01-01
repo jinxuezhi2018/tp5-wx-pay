@@ -1,7 +1,7 @@
 <?php
 
 
-namespace xuezhitech\wx\Util;
+namespace xuezhitech\wxpay\Util;
 
 
 class Sign
