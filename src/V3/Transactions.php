@@ -22,7 +22,7 @@ class Transactions
         $this->config = array_merge($this->config,$config);
         $this->sign = new \xuezhitech\wxpay\Util\Sign($this->config);
         $this->curl = new \xuezhitech\wxpay\Util\Curl();
-        $this->certificates = new \xuezhitech\wxpay\V3\Certificates($config);
+        $this->certificates = new \xuezhitech\wxpay\V3\Certificates($this->config);
     }
 
     //退款申请API
