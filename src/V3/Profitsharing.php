@@ -16,8 +16,8 @@ class Profitsharing
 
     public function __construct($config=[]){
         $this->config = array_merge($this->config,$config);
-        $this->sign = new \xuezhitech\wx\Util\Sign($this->config);
-        $this->curl = new \xuezhitech\wx\Util\Curl();
+        $this->sign = new \xuezhitech\wxpay\Util\Sign($this->config);
+        $this->curl = new \xuezhitech\wxpay\Util\Curl();
     }
 
     //删除分账接收方API

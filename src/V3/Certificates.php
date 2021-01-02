@@ -22,8 +22,17 @@ class Certificates
 
     public function __construct($config=[]){
         $this->config = array_merge($this->config,$config);
-        $this->sign = new \xuezhitech\wx\Util\Sign($this->config);
-        $this->curl = new \xuezhitech\wx\Util\Curl();
+        $this->sign = new \xuezhitech\wxpay\Util\Sign($this->config);
+        $this->curl = new \xuezhitech\wxpay\Util\Curl();
+    }
+
+    public function getMiniPaySign( $appid,$time,$nonceStr,$prepay_id ) {
+        return $this->sign->getMiniPaySign( $appid,$time,$nonceStr,$prepay_id );
+    }
+
+    public function encrypt( $data ) {
+        $encrypt = new \xuezhitech\wx\Util\Encrypt($this->config['wxpay_key']);
+        return $encrypt->getEncrypt( $data );
     }
 
     public function getCertificates() {

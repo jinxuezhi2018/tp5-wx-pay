@@ -20,9 +20,9 @@ class Transactions
 
     public function __construct($config=[]){
         $this->config = array_merge($this->config,$config);
-        $this->sign = new \xuezhitech\wx\Util\Sign($this->config);
-        $this->curl = new \xuezhitech\wx\Util\Curl();
-        $this->certificates = new \xuezhitech\wx\V3\Certificates($config);
+        $this->sign = new \xuezhitech\wxpay\Util\Sign($this->config);
+        $this->curl = new \xuezhitech\wxpay\Util\Curl();
+        $this->certificates = new \xuezhitech\wxpay\V3\Certificates($config);
     }
 
     //退款申请API

@@ -2,62 +2,36 @@
 
 namespace xuezhitech\wxpay;
 
+
+use think\Loader;
+use xuezhitech\wxpay\V3;
+
 use ReflectionClass;
 use ReflectionException;
-use ReflectionFunction;
-use ReflectionMethod;
+
 
 class WechatPay
 {
+    private $namespace = 'xuezhitech\wxpay\V3';
+
     protected static $instance;
-    /*
-    private $config = [
-        'merchant_id' => '',
-        'serial_no' => '',
-        'private_key' => '',
-        'wxpay_key' => '',
-        'user_agent' => '',
-        'apiv3_key' => '',
-        'schema'=>'WECHATPAY2-SHA256-RSA2048'
-    ]; */
-    protected function bindParams($reflect, $vars = []){
+
+    public function bindParams($reflect, $vars = []){
         if ($reflect->getNumberOfParameters() == 0) {
             return [];
         }
-        // 判断数组类型 数字数组时按顺序绑定参数
-        reset($vars);
-        $type   = key($vars) === 0 ? 1 : 0;
-        $params = $reflect->getParameters();
-
-        foreach ($params as $param) {
-            $name      = $param->getName();
-            //$lowerName = Loader::parseName($name);
-            //$class     = $param->getClass();
-            var_dump($name);exit;
-
-            if ($class) {
-                $args[] = $this->getObjectParam($class->getName(), $vars);
-            } elseif (1 == $type && !empty($vars)) {
-                $args[] = array_shift($vars);
-            } elseif (0 == $type && isset($vars[$name])) {
-                $args[] = $vars[$name];
-            } elseif (0 == $type && isset($vars[$lowerName])) {
-                $args[] = $vars[$lowerName];
-            } elseif ($param->isDefaultValueAvailable()) {
-                $args[] = $param->getDefaultValue();
-            } else {
-                throw new InvalidArgumentException('method param miss:' . $name);
-            }
-        }
-
-        return $args;
+        return [$vars];
     }
 
     public function invokeClass($class, $vars = []){
         try {
-            $reflect = new ReflectionClass($class);
+            $reflect = new ReflectionClass($this->namespace . '\\' . $class);
             $constructor = $reflect->getConstructor();
-            $args = $constructor ? $this->bindParams($constructor, $vars) : [];
+            if ( $constructor ) {
+                $args = $this->bindParams($constructor, $vars);
+            }else{
+                $args = [];
+            }
             return $reflect->newInstanceArgs($args);
         } catch (ReflectionException $e) {
             throw new ReflectionException($e);
@@ -65,10 +39,6 @@ class WechatPay
     }
 
     public function make($abstract, $vars = []){
-        $abstract = isset($this->name[$abstract]) ? $this->name[$abstract] : $abstract;
-        if (isset($this->instances[$abstract])) {
-            return $this->instances[$abstract];
-        }
         $object = $this->invokeClass($abstract, $vars);
         return $object;
     }
