@@ -71,6 +71,25 @@ class Profitsharing
         return $this->curl->getInfo($url,'POST',$body,$header);
     }
 
+    //查询分账结果API
+    public function searchOrders( $data ){
+        $url = $this->url . '/orders'.
+            '?sub_mchid='.$data['sub_mchid'].
+            '&transaction_id='.$data['transaction_id'].
+            '&out_order_no='.$data['out_trade_no'];
+        $body = '';
+        //获得签名
+        $token = $this->sign->getSign($url,'GET',$body);
+        //拼头陪信息
+        $header = [
+            'User-Agent:' . $this->config['user_agent'],
+            'Accept:application/json;charset=utf-8',
+            'Content-Type:application/json',
+            'Authorization: ' . $this->config['schema'] . ' ' . $token
+        ];
+        return $this->curl->getInfo($url,'GET',$body,$header);
+    }
+
     //查询订单剩余待分金额API
     public function ordersAmounts( $transaction_id ){
         $url = $this->url . '/orders/' . $transaction_id . '/amounts';
