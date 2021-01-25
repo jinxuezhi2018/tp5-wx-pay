@@ -71,12 +71,41 @@ class Profitsharing
         return $this->curl->getInfo($url,'POST',$body,$header);
     }
 
+    //完结分账API
+    public function finishOrders( $data ) {
+        $url = $this->url . '/finish-order';
+        //微信json格式化
+        $body = json_encode($data,JSON_UNESCAPED_UNICODE);
+        //获得签名
+        $token = $this->sign->getSign($url,'POST',$body);
+        //拼头陪信息
+        $header = [
+            'User-Agent:' . $this->config['user_agent'],
+            'Accept:application/json;charset=utf-8',
+            'Content-Type:application/json',
+            'Authorization: ' . $this->config['schema'] . ' ' . $token
+        ];
+        return $this->curl->getInfo($url,'POST',$body,$header);
+    }
+
     //查询分账结果API
     public function searchOrders( $data ){
+        if ( empty($data['sub_mchid']) ) {
+            $msg = json_encode(['code'=>'ORDER_ERROR','message'=>'二级商户号为空!']);
+            throw new \Exception($msg);
+        }
+        if ( empty($data['transaction_id']) ) {
+            $msg = json_encode(['code'=>'ORDER_ERROR','message'=>'微信订单号为空!']);
+            throw new \Exception($msg);
+        }
+        if ( empty($data['out_order_no']) ) {
+            $msg = json_encode(['code'=>'ORDER_ERROR','message'=>'商户分账单号为空!']);
+            throw new \Exception($msg);
+        }
         $url = $this->url . '/orders'.
             '?sub_mchid='.$data['sub_mchid'].
             '&transaction_id='.$data['transaction_id'].
-            '&out_order_no='.$data['out_trade_no'];
+            '&out_order_no='.$data['out_order_no'];
         $body = '';
         //获得签名
         $token = $this->sign->getSign($url,'GET',$body);
