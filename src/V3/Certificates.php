@@ -31,7 +31,7 @@ class Certificates
     }
 
     public function encrypt( $data ) {
-        $encrypt = new \xuezhitech\wx\Util\Encrypt($this->config['wxpay_key']);
+        $encrypt = new \xuezhitech\wxpay\Util\Encrypt($this->config['wxpay_key']);
         return $encrypt->getEncrypt( $data );
     }
 
