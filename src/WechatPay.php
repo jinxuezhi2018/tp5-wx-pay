@@ -3,6 +3,9 @@
 namespace xuezhitech\wxpay;
 
 
+use think\Loader;
+use xuezhitech\wxpay\V3;
+
 use ReflectionClass;
 use ReflectionException;
 

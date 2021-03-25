@@ -103,9 +103,9 @@ class Profitsharing
             throw new \Exception($msg);
         }
         $url = $this->url . '/orders'.
-            '?sub_mchid='.$data['sub_mchid'].
-            '&transaction_id='.$data['transaction_id'].
-            '&out_order_no='.$data['out_order_no'];
+                            '?sub_mchid='.$data['sub_mchid'].
+                            '&transaction_id='.$data['transaction_id'].
+                            '&out_order_no='.$data['out_order_no'];
         $body = '';
         //获得签名
         $token = $this->sign->getSign($url,'GET',$body);
